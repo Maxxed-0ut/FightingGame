@@ -23,6 +23,7 @@ class Sprite
         this.attackBox = { position: { x: this.position.x, y: this.position.y }, offset: offset, width: 100, height: 50 };
         this.color = color;
         this.isAttacking = false;
+        this.health = 100;
         
     }
     draw()
@@ -93,6 +94,19 @@ function RectColl({rect1, rect2 }) {
         && rect1.attackBox.position.y + rect1.attackBox.height >= rect2.position.y
         && rect1.attackBox.position.y <= rect2.position.y + rect2.height)
 }
+let time = 10;
+function timer()
+{
+    
+    if (time > 0)
+    {
+        setTimeout(timer, 1000);
+        time--;
+        document.querySelector('#timer').innerHTML = time;
+    }
+    
+}
+timer()
 function animate()
 {
     window.requestAnimationFrame(animate);
@@ -125,13 +139,15 @@ function animate()
     if (RectColl({ rect1: player, rect2: enemy }) && player.isAttacking)
     {
         player.isAttacking = false;
-        console.log('ow :(');
+        enemy.health -= 15;
+        document.querySelector('#enemyHealth').style.width = enemy.health + '%';
     }
 
     if (RectColl({ rect1: enemy, rect2: player }) && enemy.isAttacking) {
 
         enemy.isAttacking = false;
-        console.log('mwahaha >:)');
+        player.health -= 15;
+        document.querySelector('#playerHealth').style.width = player.health + '%';
     }
 }
 
