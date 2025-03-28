@@ -94,7 +94,27 @@ function RectColl({rect1, rect2 }) {
         && rect1.attackBox.position.y + rect1.attackBox.height >= rect2.position.y
         && rect1.attackBox.position.y <= rect2.position.y + rect2.height)
 }
-let time = 10;
+let time = 30;
+
+function winner({player, enemy }) {
+
+    document.querySelector('#tie').style.display = 'flex';
+
+    if (player.health === enemy.health) {
+
+        document.querySelector('#tie').innerHTML = 'TIE';
+
+    }
+    else if (player.health > enemy.health) {
+
+        document.querySelector('#tie').innerHTML = 'PLAYER 1 WINS!';
+    }
+    else {
+
+        document.querySelector('#tie').innerHTML = 'PLAYER 2 WINS!';
+    }
+
+}
 function timer()
 {
     
@@ -103,6 +123,10 @@ function timer()
         setTimeout(timer, 1000);
         time--;
         document.querySelector('#timer').innerHTML = time;
+    }
+    if (time === 0) {
+
+        winner({player, enemy});
     }
     
 }
@@ -139,15 +163,20 @@ function animate()
     if (RectColl({ rect1: player, rect2: enemy }) && player.isAttacking)
     {
         player.isAttacking = false;
-        enemy.health -= 15;
+        enemy.health -= 10;
         document.querySelector('#enemyHealth').style.width = enemy.health + '%';
     }
 
     if (RectColl({ rect1: enemy, rect2: player }) && enemy.isAttacking) {
 
         enemy.isAttacking = false;
-        player.health -= 15;
+        player.health -= 10;
         document.querySelector('#playerHealth').style.width = player.health + '%';
+    }
+
+    if (enemy.health <= 0 || player.health <= 0) {
+
+        winner({ player, enemy });
     }
 }
 
